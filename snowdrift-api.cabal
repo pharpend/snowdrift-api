@@ -41,21 +41,16 @@ executable snowdrift-api
   hs-source-dirs:      src/
   main-is:             Main.hs
   default-language:    Haskell2010
+  if flag(dev)
+    ghc-options: -O0 -Wall
   other-extensions:    
     CPP
     MultiWayIf
     OverloadedStrings
-  if flag(dev)
-    ghc-options: -O0 -Wall
   build-depends:
-      aeson
-    , base ==4.*
-    , bytestring
-    , conduit >=1.2.3
-    , conduit-extra >=1
-    , conduit-combinators
-    , pager
-    , text
+      base ==4.*
+    , http-types
     , wai
+    , text
     , warp
   
