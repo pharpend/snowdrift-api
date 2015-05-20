@@ -49,9 +49,19 @@ executable snowdrift-api
     CPP
     MultiWayIf
     OverloadedStrings
+  other-modules:
+    Paths_snowdrift_api
   build-depends:
       base ==4.*
+    , conduit
+    , conduit-combinators
+    , resourcet
     , http-types
-    , wai
+    , mtl
+    , pager
+    , safe
     , text
+    , unix
+    , wai
+    , wai-conduit
     , warp
