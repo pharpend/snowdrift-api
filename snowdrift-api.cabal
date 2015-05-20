@@ -11,7 +11,7 @@ homepage:            https://api.snowdrift.coop/
 license:             AGPL-3
 license-file:        LICENSE
 author:              Peter Harpending
-maintainer:          dev@lists.snowdrift.coop
+maintainer:          peter@harpending.org
 copyright:           Copyright (C) 2015 Snowdrift.coop
 category:            Web
 build-type:          Simple
