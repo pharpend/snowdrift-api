@@ -20,12 +20,20 @@ extra-source-files:
   LICENSE
   README.md
 
+flag dev
+  default: False
+  description:
+    Enable development mode settings, such as disabling optimization and
+    enabling warnings.
+
 executable snowdrift-api
   hs-source-dirs:      src/
   -- other-extensions:    
   -- other-modules:       
   main-is:             Main.hs
+  default-language:    Haskell2010
+  if flag(dev)
+    ghc-options: -O0 -Wall
   build-depends:
       base ==4.*
-  default-language:    Haskell2010
   
