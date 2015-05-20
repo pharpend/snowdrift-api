@@ -30,9 +30,13 @@ Installation
 
         ln -s cabal.config.7.10 cabal.config
 
+    For me, it's
+
+        The Glorious Glasgow Haskell Compilation System, version 7.10.1
+
 *   Once that's done:
 
-        cabal install -j
+        cabal install -j -fdev
 
 Usage
 -----
