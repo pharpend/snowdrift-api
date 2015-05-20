@@ -1,8 +1,8 @@
 snowdrift-api
 =============
 
-Snowdrift.coop <https://snowdrift.coop> is a cooperative platform to
-fund free/libre/open creative work.
+[Snowdrift.coop][1] is a cooperative platform to fund free/libre/open
+creative work.
 
 This program runs an API server to access data on and/or about
 Snowdrift.coop.
@@ -10,19 +10,25 @@ Snowdrift.coop.
 This program is experimental and should not be used for any purpose
 whatsoever by anybody.
 
+To be consistent with Snowdrift.coop, this project is written in
+[Haskell][3], and licensed under the
+[GNU Affero General Public License][4].
+
 Installation
 ------------
 
-*   First, install Haskell:
-    <https://github.com/bitemyapp/learnhaskell/blob/master/install.md>
+At the moment, you have to compile it. I develop on Arch Linux, and test
+somewhat regularly on FreeBSD as well.
 
-*   Next, enter these commands in a terminal:
+1.  [Install Haskell][2]
+
+2.  Enter these commands in a terminal:
 
         git clone git://github.com/pharpend/snowdrift-api.git
         cd snowdrift-api
         cabal sandbox init
 
-*   Run `ghc --version`. If it is 7.8.something, run
+3.  Run `ghc --version`. If it is 7.8.something, run
 
         ln -s cabal.config.7.8 cabal.config
 
@@ -34,7 +40,7 @@ Installation
 
         The Glorious Glasgow Haskell Compilation System, version 7.10.1
 
-*   Once that's done:
+4.  Once that's done:
 
         cabal install -j -fdev
 
@@ -43,15 +49,13 @@ Usage
 
 The program doesn't do anything yet, so there is no usage!
 
-Licensing
----------
-
-To be consistent with Snowdrift.coop, this project is written in Haskell
-<https://www.haskell.org>, and licensed under the GNU Affero General
-Public License <https://www.gnu.org/licenses/>
-
 Contact
 -------
 
 * Email: Peter Harpending <peter@harpending.org>
 * IRC: `pharpend` on FreeNode and OFTC
+
+[1]: https://snowdrift.coop
+[2]: https://github.com/bitemyapp/learnhaskell/blob/master/install.md
+[3]: https://www.haskell.org
+[4]: https://www.gnu.org/licenses/
