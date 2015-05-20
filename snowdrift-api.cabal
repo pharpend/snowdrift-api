@@ -46,5 +46,14 @@ executable snowdrift-api
   if flag(dev)
     ghc-options: -O0 -Wall
   build-depends:
-      base ==4.*
+      aeson
+    , base ==4.*
+    , bytestring
+    , conduit >=1.2.3
+    , conduit-extra >=1
+    , conduit-combinators
+    , pager
+    , text
+    , wai
+    , warp
   
