@@ -21,7 +21,7 @@ extra-source-files:
   README.md
 
 executable snowdrift-api
-  -- hs-source-dirs:      
+  hs-source-dirs:      src/
   -- other-extensions:    
   -- other-modules:       
   main-is:             Main.hs
