@@ -20,6 +20,8 @@ bug-reports:         https://github.com/pharpend/snowdrift-api/issues
 extra-source-files:
   LICENSE
   README.md
+data-files:
+  LICENSE
 
 flag dev
   default: False
