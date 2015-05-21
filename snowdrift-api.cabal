@@ -57,12 +57,14 @@ executable snowdrift-api
       aeson
     , attoparsec
     , base ==4.*
+    , blaze-html
     , bytestring
     , conduit >=1.2.3
     , conduit-extra
     , conduit-combinators
     , resourcet
     , http-types
+    , markdown
     , mtl
     , pager
     , safe
