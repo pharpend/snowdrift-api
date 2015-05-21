@@ -34,7 +34,7 @@ import Control.Monad
 import Control.Monad.Trans
 import Control.Monad.Trans.Resource
 import Data.Aeson
-import qualified Data.ByteString.Lazy.Char8 as BLC
+import qualified Data.ByteString.Char8 as BC
 import Data.Conduit
 import Data.Conduit.Attoparsec
 import qualified Data.Conduit.Combinators as CC
@@ -45,7 +45,7 @@ import qualified Data.Text as T
 import qualified Data.Text.Encoding as TE
 import qualified Data.Text.IO as TIO
 import Data.Version (showVersion)
-import Network.HTTP.Types.Status
+import Network.HTTP.Types
 import Network.Wai
 import Network.Wai.Conduit
 import Network.Wai.Handler.Warp
@@ -111,11 +111,23 @@ runArgs (Args port_ quiet_) =
 app :: Request -> (Response -> IO ResponseReceived) -> IO ResponseReceived 
 app request responseHandler =
   runResourceT
-    (do jsonValue <-
-          connect (sourceRequestBody request)
-                  (sinkParser json)
-        let response_ =
-              responseLBS status200
-                          mempty
-                          (encode jsonValue)
-        lift (responseHandler response_))
+    (do let accept_ =
+              H.lookup hAccept (H.fromList (requestHeaders request))
+        case accept_ of
+          Nothing ->
+            lift (responseHandler (responseLBS status406 mempty "No accept header"))
+          Just accept ->
+            if |  accept == "text/html" ->
+                 lift (do readmePath <-
+                            getDataFileName "res/index.html"
+                          responseHandler (responseFile status200 mempty readmePath Nothing))
+               |  or (fmap (== accept) ["application/json","text/javascript"]) ->
+                 do jsonValue <-
+                      connect (sourceRequestBody request)
+                              (sinkParser json)
+                    let response_ =
+                          responseLBS status200
+                                      mempty
+                                      (encode jsonValue)
+                    lift (responseHandler response_)
+               |  otherwise -> fail (BC.unpack accept))
