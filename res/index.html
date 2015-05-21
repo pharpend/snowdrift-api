@@ -1,0 +1,46 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+  <meta http-equiv="Content-Style-Type" content="text/css" />
+  <meta name="generator" content="pandoc" />
+  <title></title>
+  <style type="text/css">code{white-space: pre;}</style>
+</head>
+<body>
+<h1 id="snowdrift-api">snowdrift-api</h1>
+<p><a href="https://snowdrift.coop">Snowdrift.coop</a> is a cooperative platform to fund free/libre/open creative work.</p>
+<p>This program runs an API server to access data on and/or about Snowdrift.coop.</p>
+<p>This program is experimental and should not be used for any purpose whatsoever by anybody.</p>
+<p>To be consistent with Snowdrift.coop, this project is written in <a href="https://www.haskell.org">Haskell</a>, and licensed under the <a href="https://www.gnu.org/licenses/">GNU Affero General Public License</a>.</p>
+<h2 id="installation">Installation</h2>
+<p>At the moment, you have to compile it. I develop on Arch Linux, and test somewhat regularly on FreeBSD as well.</p>
+<ol style="list-style-type: decimal">
+<li><p><a href="https://github.com/bitemyapp/learnhaskell/blob/master/install.md">Install Haskell</a></p></li>
+<li><p>Enter these commands in a terminal:</p>
+<pre><code>git clone git://github.com/pharpend/snowdrift-api.git
+cd snowdrift-api
+cabal sandbox init</code></pre></li>
+<li><p>Run <code>ghc --version</code>. If it is 7.8.something, run</p>
+<pre><code>ln -s cabal.config.7.8 cabal.config</code></pre>
+<p>If it's 7.10.something, run</p>
+<pre><code>ln -s cabal.config.7.10 cabal.config</code></pre>
+<p>For me, it's</p>
+<pre><code>The Glorious Glasgow Haskell Compilation System, version 7.10.1</code></pre></li>
+<li><p>Once that's done:</p>
+<pre><code>cabal install -j -fdev</code></pre></li>
+</ol>
+<h2 id="usage">Usage</h2>
+<p>The program doesn't do anything yet, so there is no usage!</p>
+<h2 id="contact">Contact</h2>
+<ul>
+<li>Email: Peter Harpending <script type="text/javascript">
+<!--
+h='&#104;&#x61;&#114;&#112;&#x65;&#110;&#100;&#x69;&#110;&#x67;&#46;&#x6f;&#114;&#x67;';a='&#64;';n='&#112;&#x65;&#116;&#x65;&#114;';e=n+a+h;
+document.write('<a h'+'ref'+'="ma'+'ilto'+':'+e+'" clas'+'s="em' + 'ail">'+e+'<\/'+'a'+'>');
+// -->
+</script><noscript>&#112;&#x65;&#116;&#x65;&#114;&#32;&#x61;&#116;&#32;&#104;&#x61;&#114;&#112;&#x65;&#110;&#100;&#x69;&#110;&#x67;&#32;&#100;&#x6f;&#116;&#32;&#x6f;&#114;&#x67;</noscript></li>
+<li>IRC: <code>pharpend</code> on FreeNode and OFTC</li>
+</ul>
+</body>
+</html>
