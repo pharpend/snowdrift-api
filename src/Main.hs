@@ -35,6 +35,8 @@ import Control.Monad.Trans
 import Control.Monad.Trans.Resource
 import Data.Aeson
 import qualified Data.ByteString.Char8 as BC
+import qualified Data.ByteString.Lazy as BL
+import qualified Data.ByteString.Lazy.Char8 as BLC
 import Data.Conduit
 import Data.Conduit.Attoparsec
 import qualified Data.Conduit.Combinators as CC
@@ -110,24 +112,31 @@ runArgs (Args port_ quiet_) =
 -- |At the moment, this just sends back the request body
 app :: Request -> (Response -> IO ResponseReceived) -> IO ResponseReceived 
 app request responseHandler =
-  runResourceT
-    (do let accept_ =
-              H.lookup hAccept (H.fromList (requestHeaders request))
-        case accept_ of
-          Nothing ->
-            lift (responseHandler (responseLBS status406 mempty "No accept header"))
-          Just accept ->
-            if |  accept == "text/html" ->
-                 lift (do readmePath <-
-                            getDataFileName "res/index.html"
-                          responseHandler (responseFile status200 mempty readmePath Nothing))
-               |  or (fmap (== accept) ["application/json","text/javascript"]) ->
-                 do jsonValue <-
-                      connect (sourceRequestBody request)
-                              (sinkParser json)
-                    let response_ =
-                          responseLBS status200
-                                      mempty
-                                      (encode jsonValue)
-                    lift (responseHandler response_)
-               |  otherwise -> fail (BC.unpack accept))
+  do case parseMethod (requestMethod request) of
+       Left bs ->
+         responseHandler
+           (responseLBS status500
+                        mempty
+                        (BL.fromStrict bs))
+       Right req ->
+         case req of
+           GET ->
+             do indexName <-
+                  getDataFileName "res/index.html"
+                responseHandler (responseFile status200 mempty indexName Nothing)
+           POST ->
+             runResourceT
+               (do eitherJSONValue <-
+                     connect (sourceRequestBody request)
+                             (sinkParserEither json)
+                   let response_ =
+                         case eitherJSONValue of
+                           Left parseError ->
+                             responseLBS status500
+                                         mempty
+                                         (BLC.pack (show parseError))
+                           Right jsonValue ->
+                             responseLBS status200
+                                         mempty
+                                         (encode jsonValue)
+                   lift (responseHandler response_))
