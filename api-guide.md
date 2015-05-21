@@ -10,7 +10,7 @@ If you send the server an HTTP POST request containing JSON data, it
 will respond by decoding & re-encoding the JSON data. In theory, this
 server, at the moment, is a fully functional JSON minifier.
 
-    $ curl http://localhost:8778 -d '                                                                                                                                                                                          pete@valentine
+    $ curl http://localhost:8778 -d '
          {
            "foo": "bar",
            "baz": "bop",
