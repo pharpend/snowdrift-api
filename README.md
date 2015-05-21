@@ -14,6 +14,8 @@ To be consistent with Snowdrift.coop, this project is written in
 [Haskell][3], and licensed under the
 [GNU Affero General Public License][4].
 
+If you want a guide to the API itself, see the [API Guide](api-guide.md)
+
 Installation
 ------------
 
