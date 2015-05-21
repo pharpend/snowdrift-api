@@ -47,7 +47,17 @@ somewhat regularly on FreeBSD as well.
 Usage
 -----
 
-The program doesn't do anything yet, so there is no usage!
+    snowdrift-api v.0.1.0.0
+    Written by Peter Harpending.
+    Copyright (c) 2015 Snowdrift.coop. See `snowdrift-api --license` for the full license.
+    
+    OPTIONS
+        -h,--help                         Show this page.
+        --license                         Print out the license (AGPLv3+).
+        --version                         Print out the version.
+        -p,--port PORT                    Port on which to run the server (default: 8778).
+        -q,--quiet                        Don't output anything to stdout.
+
 
 Contact
 -------
