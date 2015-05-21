@@ -30,10 +30,15 @@
 
 module Main where
 
+import Control.Monad
 import Control.Monad.Trans
 import Control.Monad.Trans.Resource
+import Data.Aeson
+import qualified Data.ByteString.Lazy.Char8 as BLC
 import Data.Conduit
+import Data.Conduit.Attoparsec
 import qualified Data.Conduit.Combinators as CC
+import qualified Data.HashMap.Lazy as H
 import Data.List
 import Data.Text (Text)
 import qualified Data.Text as T
@@ -46,6 +51,7 @@ import Network.Wai.Conduit
 import Network.Wai.Handler.Warp
 import Paths_snowdrift_api
 import Safe
+import qualified System.IO as IO
 import System.Pager
 import System.Posix.ByteString hiding (version)
 
@@ -53,7 +59,7 @@ import System.Posix.ByteString hiding (version)
 import Data.Monoid
 #endif
 
--- |Main is null for now
+-- |Process some 
 main :: IO ()
 main =
   do cmdargs <- fmap (fmap TE.decodeUtf8) getArgs
@@ -70,7 +76,8 @@ main =
                                         cmdargs of
                            Nothing -> 8778
                            Just x ->
-                             read (T.unpack (at cmdargs (x + 1)))))
+                             read (T.unpack (at cmdargs (x + 1))))
+                        (or (fmap (`elem` cmdargs) ["--quiet","-q"])))
 
 -- |The help page
 helpPage :: Text
@@ -82,24 +89,33 @@ helpPage =
             ,"OPTIONS"
             ,T.stripEnd
                (T.unlines (fmap (mappend (T.replicate 4 " "))
-                                ["-h,--help                         Show this page"
+                                ["-h,--help                         Show this page."
                                 ,"--license                         Print out the license (AGPLv3+)."
                                 ,"--version                         Print out the version."
-                                ,"-p,--port PORT                    Port on which to run the server (default: 8778)"]))]
+                                ,"-p,--port PORT                    Port on which to run the server (default: 8778)."
+                                ,"-q,--quiet,-stfu                  Don't output anything to stdout."]))]
 
 -- |After taking care of the trivial stuff, the arguments are marshaled
 -- into this type.
 data Args =
-  Args {port :: Int}
+  Args {port :: Int, quiet :: Bool}
 
 -- |Take an 'Args' and run with it
 runArgs :: Args -> IO ()
-runArgs (Args port_) = run port_ app
+runArgs (Args port_ quiet_) =
+  do unless quiet_
+            (TIO.putStrLn (mappend "Starting up snowdrift-api on port " (T.pack (show port_))))
+     run port_ app
 
 -- |At the moment, this just sends back the request body
 app :: Request -> (Response -> IO ResponseReceived) -> IO ResponseReceived 
 app request responseHandler =
   runResourceT
-    (do requestBody_ <- connect (sourceRequestBody request) CC.sinkLazy
-        let response_ = responseLBS status200 mempty requestBody_
+    (do jsonValue <-
+          connect (sourceRequestBody request)
+                  (sinkParser json)
+        let response_ =
+              responseLBS status200
+                          mempty
+                          (encode jsonValue)
         lift (responseHandler response_))

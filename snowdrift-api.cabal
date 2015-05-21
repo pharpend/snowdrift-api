@@ -52,8 +52,12 @@ executable snowdrift-api
   other-modules:
     Paths_snowdrift_api
   build-depends:
-      base ==4.*
-    , conduit
+      aeson
+    , attoparsec
+    , base ==4.*
+    , bytestring
+    , conduit >=1.2.3
+    , conduit-extra
     , conduit-combinators
     , resourcet
     , http-types
@@ -62,6 +66,7 @@ executable snowdrift-api
     , safe
     , text
     , unix
+    , unordered-containers
     , wai
     , wai-conduit
     , warp
