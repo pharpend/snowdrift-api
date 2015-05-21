@@ -56,6 +56,11 @@ import Safe
 import qualified System.IO as IO
 import System.Pager
 import System.Posix.ByteString hiding (version)
+import Text.Blaze.Html5 (Html)
+import qualified Text.Blaze.Html5 as M
+import qualified Text.Blaze.Html5.Attributes as A
+import Text.Blaze.Html.Renderer.Utf8
+import Text.Markdown
 
 #if !(MIN_VERSION_base(4,8,0))
 import Data.Monoid
@@ -121,9 +126,18 @@ app request responseHandler =
        Right req ->
          case req of
            GET ->
-             do indexName <-
-                  getDataFileName "res/index.html"
-                responseHandler (responseFile status200 mempty indexName Nothing)
+             do apiGuideFile <-
+                  getDataFileName "api-guide.md"
+                apiGuideText <-
+                  runResourceT
+                    (connect (CC.sourceFile apiGuideFile)
+                             (CC.sinkLazy))
+                let apiGuideHtml =
+                      mkPageHtml (markdown def apiGuideText)
+                responseHandler
+                  (responseLBS status200
+                               mempty
+                               (renderHtml apiGuideHtml))
            POST ->
              runResourceT
                (do eitherJSONValue <-
@@ -140,3 +154,9 @@ app request responseHandler =
                                          mempty
                                          (encode jsonValue)
                    lift (responseHandler response_))
+
+mkPageHtml :: Html -> Html
+mkPageHtml h =
+  M.html (do M.docType
+             M.head (M.title (M.toHtml (mappend "Snowdrift API v." (showVersion version))))
+             M.body h)
